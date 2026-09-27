@@ -22,8 +22,10 @@
         }
 
         .shield {
-            font-size: 25px;
-        }
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
 
         h2 {
             margin: 0;
@@ -121,10 +123,10 @@
 
 <body>
 
-    <div class="header">
-        <div class="shield">🛡️</div>
-        <h2>PhishGuard</h2>
-    </div>
+   <div class="header">
+    <img src="icons/icon128.png" class="shield" alt="PhishGuard">
+    <h2>PhishGuard</h2>
+</div>
 
     <div class="url-box" id="url">
         Checking current page...
