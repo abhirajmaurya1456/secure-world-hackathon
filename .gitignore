@@ -24,3 +24,5 @@ docu.txt
 data/raw/phishing.csv
 data/processed/phishing_clean.csv
 data/processed/combined_urls.csv
+
+PROJECT_LOG.txt
