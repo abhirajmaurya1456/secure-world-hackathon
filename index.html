@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhishGuard — URL Security Demo</title>
+  <link rel="icon" type="image/png" href="frontend/extension/icons/icon128.png">
+  <meta name="description" content="PhishGuard explainable phishing and malicious-URL detection demo.">
+  <style>
+    :root {
+      --bg: #08101d;
+      --panel: #101b2d;
+      --panel2: #142238;
+      --border: #263b58;
+      --text: #f3f7fc;
+      --muted: #9eafc7;
+      --cyan: #3ed3eb;
+      --blue: #5b8cff;
+      --green: #45d58b;
+      --yellow: #f4c34d;
+      --red: #f25c5c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(62, 211, 235, .10), transparent 28%),
+        radial-gradient(circle at 85% 20%, rgba(91, 140, 255, .10), transparent 30%),
+        var(--bg);
+      color: var(--text);
+    }
+
+    .wrap {
+      width: min(1080px, calc(100% - 32px));
+      margin: auto;
+    }
+
+    header {
+      padding: 42px 0 22px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+.shield img {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+}
+
+    h1 {
+      margin: 0;
+      font-size: 31px;
+      letter-spacing: -.5px;
+    }
+
+    .tag {
+      color: var(--cyan);
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    .hero {
+      padding: 28px 0 18px;
+    }
+
+    .hero h2 {
+      font-size: 42px;
+      line-height: 1.05;
+      margin: 0 0 14px;
+      letter-spacing: -1.4px;
+      max-width: 760px;
+    }
+
+    .hero p {
+      color: var(--muted);
+      max-width: 760px;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .card {
+      background: rgba(16, 27, 45, .94);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 18px 55px rgba(0, 0, 0, .22);
+    }
+
+    .input-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    input {
+      flex: 1;
+      min-width: 0;
+      background: #091423;
+      color: var(--text);
+      border: 1px solid #304863;
+      border-radius: 12px;
+      padding: 15px 16px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(62, 211, 235, .10);
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 0 22px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      background: var(--cyan);
+      color: #07121e;
+      min-height: 50px;
+    }
+
+    button:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    .examples {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .example {
+      background: #17263c;
+      color: #bcd0e8;
+      border: 1px solid #29415e;
+      padding: 8px 11px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .result {
+      margin-top: 20px;
+      display: none;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    .verdict {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .verdict-main {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .status {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      font-weight: 800;
+      background: #17263c;
+    }
+
+    .status.safe {
+      background: rgba(69, 213, 139, .12);
+      color: var(--green);
+    }
+
+    .status.suspicious {
+      background: rgba(244, 195, 77, .12);
+      color: var(--yellow);
+    }
+
+    .status.phishing {
+      background: rgba(242, 92, 92, .12);
+      color: var(--red);
+    }
+
+    .verdict h3 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .sub {
+      color: var(--muted);
+      margin-top: 4px;
+      font-size: 13px;
+    }
+
+    .score {
+      text-align: right;
+      min-width: 130px;
+    }
+
+    .score strong {
+      font-size: 34px;
+    }
+
+    .bar {
+      height: 10px;
+      background: #23344d;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 18px;
+    }
+
+    .fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 99px;
+      transition: width .4s ease;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .mini {
+      background: #0d1829;
+      border: 1px solid #223651;
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .mini h4 {
+      margin: 0 0 10px;
+      color: #c9d8eb;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+    }
+
+    .mini p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      word-break: break-word;
+    }
+
+    ul.reasons {
+      margin: 0;
+      padding-left: 18px;
+      color: #d9e3ef;
+    }
+
+    ul.reasons li {
+      margin: 7px 0;
+      line-height: 1.4;
+    }
+
+    .error {
+      color: #ff8f8f;
+      margin-top: 12px;
+      display: none;
+      font-size: 14px;
+    }
+
+    .loading {
+      display: none;
+      color: var(--muted);
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    footer {
+      padding: 28px 0 42px;
+      color: #71849e;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    footer a {
+      color: #8fdceb;
+      text-decoration: none;
+    }
+
+    .note {
+      margin-top: 16px;
+      color: #7f93ad;
+      font-size: 12px;
+    }
+
+    @media(max-width:700px) {
+      .hero h2 {
+        font-size: 32px;
+      }
+
+      .input-row {
+        flex-direction: column;
+      }
+
+      button {
+        min-height: 48px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .score {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="shield">
+  <img src="frontend/extension/icons/icon128.png" alt="PhishGuard">
+</div>
+        <div>
+          <h1>PhishGuard</h1>
+          <div class="tag">Explainable phishing URL detection</div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h2>Check a URL before you trust it.</h2>
+        <p>
+          Enter a website URL and PhishGuard will analyze its URL structure using
+          machine learning, security rules, and known-domain context.
+          The result includes a risk score and the reasons behind the decision.
+        </p>
+      </section>
+
+      <section class="card">
+        <label for="url"><strong>URL to analyze</strong></label>
+        <div class="input-row">
+          <input id="url" type="text" placeholder="https://example.com/login" autocomplete="off">
+          <button id="analyze">Analyze URL</button>
+        </div>
+
+        <div class="examples">
+          <button class="example" data-url="https://www.youtube.com/">Test SAFE URL</button>
+          <button class="example" data-url="https://secure-login-example.com/verify/account">Test controlled PHISHING
+            URL</button>
+        </div>
+
+        <div id="loading" class="loading">Analyzing URL…</div>
+        <div id="error" class="error"></div>
+
+        <div id="result" class="result">
+          <div class="verdict">
+            <div class="verdict-main">
+              <div id="statusIcon" class="status">?</div>
+              <div>
+                <h3 id="verdict">—</h3>
+                <div id="riskLevel" class="sub">—</div>
+              </div>
+            </div>
+            <div class="score">
+              <div class="sub">Risk score</div>
+              <strong id="score">—</strong><span>/100</span>
+            </div>
+          </div>
+
+          <div class="bar">
+            <div id="fill" class="fill"></div>
+          </div>
+
+          <div class="grid">
+            <div class="mini">
+              <h4>Analyzed URL</h4>
+              <p id="outUrl">—</p>
+            </div>
+            <div class="mini">
+              <h4>Hostname</h4>
+              <p id="hostname">—</p>
+            </div>
+            <div class="mini">
+              <h4>Known-domain context</h4>
+              <p id="knownDomain">—</p>
+            </div>
+            <div class="mini">
+              <h4>Model signals</h4>
+              <p id="models">—</p>
+            </div>
+          </div>
+
+          <div class="mini" style="margin-top:14px;">
+            <h4>Why this decision?</h4>
+            <ul id="reasons" class="reasons"></ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <strong>PhishGuard Demo</strong> — a Bit & Build / Secure World hackathon prototype.
+      This page is a demo interface for the deployed PhishGuard analysis API.
+      URL data entered here is sent to the PhishGuard backend for analysis.
+      <br><br>
+      URL-only detection cannot guarantee detection of every malicious page.
+    </footer>
+  </div>
+
+  <script>
+    const API_URL = "https://phishguard-backend-h2bo.onrender.com/analyze";
+
+    const input = document.getElementById("url");
+    const analyzeBtn = document.getElementById("analyze");
+    const result = document.getElementById("result");
+    const loading = document.getElementById("loading");
+    const errorBox = document.getElementById("error");
+
+    document.querySelectorAll(".example").forEach(btn => {
+      btn.addEventListener("click", () => {
+        input.value = btn.dataset.url;
+        analyze();
+      });
+    });
+
+    analyzeBtn.addEventListener("click", analyze);
+    input.addEventListener("keydown", e => {
+      if (e.key === "Enter") analyze();
+    });
+
+    function normalizeUrl(value) {
+      value = value.trim();
+      if (!value) return "";
+      if (!/^https?:\/\//i.test(value)) value = "https://" + value;
+      return value;
+    }
+
+    async function analyze() {
+      const url = normalizeUrl(input.value);
+      if (!url) {
+        showError("Please enter a URL.");
+        return;
+      }
+
+      hideError();
+      loading.style.display = "block";
+      result.classList.remove("show");
+      analyzeBtn.disabled = true;
+
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url })
+        });
+
+        if (!response.ok) {
+          throw new Error("Backend returned HTTP " + response.status);
+        }
+
+        const data = await response.json();
+        render(data);
+      } catch (err) {
+        showError("Could not reach the PhishGuard backend. Please try again.");
+      } finally {
+        loading.style.display = "none";
+        analyzeBtn.disabled = false;
+      }
+    }
+
+    function render(data) {
+      const verdict = String(data.verdict || "UNKNOWN").toUpperCase();
+      const score = Number(data.risk_score ?? 0);
+      const level = data.risk_level || "—";
+
+      const icon = document.getElementById("statusIcon");
+      icon.className = "status " + verdict.toLowerCase();
+      icon.textContent = verdict === "PHISHING" ? "!" : verdict === "SUSPICIOUS" ? "?" : "✓";
+
+      document.getElementById("verdict").textContent = verdict;
+      document.getElementById("riskLevel").textContent = "Risk level: " + level;
+      document.getElementById("score").textContent = score.toFixed(0);
+      document.getElementById("outUrl").textContent = data.url || "—";
+      document.getElementById("hostname").textContent = data.hostname || "—";
+      document.getElementById("knownDomain").textContent =
+        data.known_domain ? "Known domain context: yes" : "Known domain context: no";
+
+    function formatProbability(value) {
+  if (value == null) return "—";
+
+  let n = Number(value);
+
+  // Handles both 0–1 probabilities and 0–100 percentages.
+  if (n > 1) n = n / 100;
+
+  return (n * 100).toFixed(1) + "%";
+}
+
+const rf = formatProbability(data.rf_probability);
+const raw = formatProbability(data.raw_probability);
+      document.getElementById("models").textContent = "RF: " + rf + " • Raw URL: " + raw;
+
+      const fill = document.getElementById("fill");
+      fill.style.width = Math.max(0, Math.min(100, score)) + "%";
+      fill.style.background = verdict === "PHISHING" ? "var(--red)" :
+        verdict === "SUSPICIOUS" ? "var(--yellow)" : "var(--green)";
+
+      const reasons = document.getElementById("reasons");
+      reasons.innerHTML = "";
+      const list = Array.isArray(data.reasons) && data.reasons.length
+        ? data.reasons
+        : ["No additional explanation was returned."];
+      list.forEach(reason => {
+        const li = document.createElement("li");
+        li.textContent = reason;
+        reasons.appendChild(li);
+      });
+
+      result.classList.add("show");
+    }
+
+    function showError(message) {
+      errorBox.textContent = message;
+      errorBox.style.display = "block";
+    }
+    function hideError() {
+      errorBox.style.display = "none";
+    }
+  </script>
+</body>
+
+</html>
