@@ -1,0 +1,16 @@
+url,scenario,expected_verdict
+https://www.youtube.com/,Legitimate YouTube homepage,SAFE
+https://www.youtube.com/watch?v=wheOPSjBPoW&list=RDqInvYYaRdrU&index=27,Legitimate complex YouTube URL,SAFE
+https://github.com/,Legitimate GitHub homepage,SAFE
+https://github.com/login,Legitimate GitHub login page,SAFE
+https://www.iitrpr.ac.in/,Legitimate IIT Ropar homepage,SAFE
+https://www.iitrpr.ac.in/tenders,Legitimate IIT Ropar tenders page,SAFE
+https://www.amazon.in/,Legitimate Amazon domain,SAFE
+https://docs.google.com/presentation/d/e/2PACX-1vSpKXu1td_dnZbKzWX57BfTJWU8c14dsbqMBnK1JcxVITLwPoKdo4URVQUV1x0TzCFvros0R3bCItv/pub?start=false&loop=false&delayms=3000&slide=id.p,Legitimate complex Google Docs URL,SAFE
+https://secure-login-example.com/verify/account,Synthetic phishing login URL,PHISHING
+http://192.168.1.10/login/verify?password=12345678,Synthetic IP-based credential phishing URL,PHISHING
+https://account-security-update-example.com/verify?id=93847291,Synthetic account-update phishing URL,PHISHING
+https://secure-bank-example.com/login/verify/password,Synthetic banking credential phishing URL,PHISHING
+https://credential-security-example.com/account/unlock/verify,Synthetic credential theft phishing URL,PHISHING
+http://10.0.0.25/bank/login/verify?password=12345678,Synthetic private-IP phishing URL,PHISHING
+https://example.com/a/b/c/d/e/f/123456789,Synthetic long-path distribution-shift stress case,STRESS_CASE

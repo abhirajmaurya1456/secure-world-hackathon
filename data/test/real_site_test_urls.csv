@@ -1,0 +1,11 @@
+url,expected_label,test_case
+https://www.youtube.com/,0,youtube_home
+https://www.youtube.com/watch?v=kc-D6IhyXGA&list=RDqInvYYaRdrU&index=27,0,youtube_complex_video
+https://www.iitrpr.ac.in/,0,iit_ropar_home
+https://www.iitrpr.ac.in/tenders,0,iit_ropar_path
+https://github.com/,0,github_home
+https://github.com/login,0,github_login
+https://example.com/,0,example_domain
+https://www.amazon.in/b/?_encoding=UTF8&_encoding=UTF8&node=211756350031&ref_=pd_hp_d_r_stg_unk&pd_rd_w=f9gfT&content-id=amzn1.sym.c825e489-6b16-4623-91c6-af6ab2379055&pf_rd_p=c825e489-6b16-4623-91c6-af6ab2379055&pf_rd_r=FCNY13FNAQD726PB9M69&pd_rd_wg=uEZYL&pd_rd_r=cf90236a-62d4-4f9b-b9c6-e7fdcdf66c43,0,amazon_complex_url
+https://docs.google.com/document/d/1UKpN6d73_kawJwjuqSVhTWfMPi-aR8glpR7uKubf1Yo/edit?usp=sharing,0,googgle_doc_url
+https://in.pinterest.com/pin/10133167907367690/feedback/?invite_code=dd6c9a51d7cc46f792c6228521810743&sender_id=960111351718809891,0,pinterest_url

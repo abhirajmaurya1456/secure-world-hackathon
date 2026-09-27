@@ -1,0 +1,9 @@
+url,expected_label,test_case
+http://192.168.1.10/login/verify?password=12345678,1,ip_login_password
+https://secure-login-example.com/verify/account,1,login_verify
+https://account-security-update-example.com/verify?id=93847291,1,account_update
+http://paypal-security-example.com/login/verify,1,brand_login
+https://microsoft-account-security-example.com/verify/password,1,brand_login
+https://secure-bank-login-example.com/account/verify,1,bank_login
+https://login-verification-example.com/update/password?id=82736491,1,credential_theft_pattern
+https://example.com/login/verify/account/password,1,suspicious_path

@@ -1,0 +1,13 @@
+url,expected_label,test_case
+https://www.google.com/,0,benign_simple
+https://stackoverflow.com/questions,0,benign_path
+https://github.com/user/repository,0,benign_path
+https://www.wikipedia.org/wiki/Cybersecurity,0,benign_path
+https://www.microsoft.com/en-us/security,0,benign_path
+https://secure-login-example.com/verify/account,1,phishing_like_login
+http://example.com/login/verify/password,1,phishing_like_http
+http://192.168.1.10/login/verify,1,phishing_like_ip
+https://account-security-update-example.com/verify?id=93847291,1,phishing_like_complex
+https://example.com/a/b/c/d/e/f/123456789,1,phishing_like_long_path
+https://example.com/,0,benign_simple
+https://github.com/login,0,benign_sensitive_path
