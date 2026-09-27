@@ -2117,3 +2117,243 @@ prepare README, technical report, presentation and final demo.
 Next planned task:
 Expand and validate data/test/demo coverage before final
 presentation and documentation preparation.
+
+
+============================================================
+38. CLOUD BACKEND DEPLOYMENT
+============================================================
+
+The FastAPI backend was deployed successfully as a Render Web
+Service for remote access.
+
+Deployment platform:
+Render
+
+Production backend:
+https://phishguard-backend-h2bo.onrender.com
+
+Production API endpoint:
+POST /analyze
+
+Production API documentation:
+https://phishguard-backend-h2bo.onrender.com/docs
+
+Render configuration:
+- Runtime: Python
+- Region: Oregon (US West)
+- Plan: Free
+- Build command:
+  pip install -r requirements.txt
+- Start command:
+  uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+
+The deployment completed successfully and Uvicorn started on the
+Render-provided port.
+
+The production API was manually verified using:
+1. Legitimate YouTube URL
+2. Controlled synthetic phishing URL
+
+Observed results:
+
+YouTube:
+- Verdict: SAFE
+- Risk level: LOW
+- Risk score: 25.18
+- Known domain: true
+
+Controlled phishing URL:
+https://secure-login-example.com/verify/account
+- Verdict: PHISHING
+- Risk level: HIGH
+- Risk score: 100
+- Known domain: false
+
+============================================================
+39. PRODUCTION CHROME EXTENSION INTEGRATION
+============================================================
+
+The Chrome extension was updated from the local development
+backend to the deployed Render backend.
+
+Previous development API:
+http://127.0.0.1:8000/analyze
+
+Production API:
+https://phishguard-backend-h2bo.onrender.com/analyze
+
+Updated:
+- frontend/extension/background.js
+- frontend/extension/manifest.json
+
+The extension's host permissions were updated to allow communication
+with the deployed HTTPS backend.
+
+The unpacked Chrome extension was reloaded and successfully tested
+against the production backend.
+
+============================================================
+40. END-TO-END PRODUCTION VERIFICATION
+============================================================
+
+The complete production pipeline was verified successfully:
+
+User navigates to a URL
+        ↓
+Chrome Extension detects navigation
+        ↓
+Render-hosted FastAPI backend
+        ↓
+Security Engine V2
+        ↓
+Random Forest + Raw URL model
+        ↓
+Region-aware/contextual decision layer
+        ↓
+SAFE / SUSPICIOUS / PHISHING
+        ↓
+Human-readable explanation
+
+Verified legitimate navigation:
+- Render backend URL
+- Result: SAFE
+
+Verified controlled phishing navigation:
+https://secure-login-example.com/verify/account
+- Result: PHISHING
+- Warning page displayed automatically
+
+The Chrome extension successfully intercepted the phishing-like
+navigation and displayed the PhishGuard warning page.
+
+The Continue Anyway and Go Back navigation flow was also retained
+during the production backend migration.
+
+Important:
+The extension performs navigation interception and warning-page
+redirection. It should not be described as network-level blocking.
+
+============================================================
+41. PUBLIC EXTENSION PREPARATION
+============================================================
+
+The project is being prepared for public Chrome extension
+distribution through the Chrome Web Store.
+
+Created:
+PRIVACY_POLICY.md
+
+The privacy policy documents:
+- URL processing
+- Backend URL analysis
+- Local extension storage
+- Information not intentionally collected
+- Render as the cloud backend provider
+- HTTPS communication
+- Contact information
+
+Contact:
+abhirajmaurya1456@gmail.com
+
+The extension is currently using Manifest V3.
+
+Current extension permissions:
+- activeTab
+- tabs
+- storage
+- webNavigation
+
+Current host permissions:
+- https://phishguard-backend-h2bo.onrender.com/*
+- <all_urls>
+
+Public Chrome Web Store deployment is the next distribution step.
+
+============================================================
+42. GIT / REPOSITORY SECURITY
+============================================================
+
+During the initial GitHub push, GitHub Push Protection detected
+AWS credential-like strings present inside downloaded phishing
+dataset files.
+
+The affected raw/processed dataset files were removed from Git
+tracking and added to .gitignore.
+
+The original local Git history was discarded and recreated so that
+the detected secret-containing commit would not remain in the
+repository history.
+
+A clean Git history was then created and successfully pushed to
+GitHub.
+
+Sensitive dataset files excluded from the repository:
+- data/raw/phishing.csv
+- data/processed/phishing_clean.csv
+- data/processed/combined_urls.csv
+
+The actual local dataset files were not deleted; they remain
+available locally for reproducibility and further experimentation.
+
+The final repository push was accepted successfully by GitHub
+without secret-scanning violations.
+
+============================================================
+43. CURRENT PROJECT STATUS — UPDATED
+============================================================
+
+Completed:
+- Dataset collection and cleaning
+- PhishTank phishing dataset preparation
+- Tranco domain context preparation
+- LegitPhish realistic legitimate URL preparation
+- URL feature extraction
+- Hostname-aware ML evaluation
+- Random Forest baseline
+- HTTPS ablation robustness test
+- Raw URL character-level model
+- Ensemble baseline
+- Security Engine V2
+- Region-aware URL analysis
+- Model 4 final ML experiment
+- Distribution-shift stress testing
+- Final Security Engine V2 evaluation
+- FastAPI backend
+- Render cloud deployment
+- Production API verification
+- Chrome extension prototype
+- Production extension integration
+- Automatic phishing warning flow
+- End-to-end production verification
+- Initial demo dataset
+- Privacy policy preparation
+- GitHub repository deployment
+
+Current production architecture:
+Chrome Extension
+    ↓
+Render FastAPI backend
+    ↓
+Security Engine V2
+    ↓
+Random Forest + Raw URL model
+    ↓
+Region-aware/contextual decision layer
+    ↓
+Verdict + risk score + explanations
+
+Model 4 status:
+Retained as the final ML experiment/benchmark.
+Not used in the production decision engine.
+
+Third-party threat-intelligence API:
+Not used in the core prototype.
+
+Current focus:
+- Finalize public Chrome extension packaging
+- Finalize demonstration dataset
+- Prepare README
+- Prepare technical report
+- Prepare 7-minute presentation
+- Capture final screenshots/evidence
+- Perform final end-to-end rehearsal
