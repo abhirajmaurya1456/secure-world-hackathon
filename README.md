@@ -305,6 +305,25 @@ The PhishGuard Chrome extension has been submitted for Chrome Web Store review.
 
 The public store link will be added here after publication.
 
+## Live Demo
+
+PhishGuard includes a static web demo that provides a simple user-facing interface for testing the deployed detection engine.
+
+**Demo:** https://abhirajmaurya1456.github.io/secure-world-hackathon/
+
+The demo allows users to:
+- Enter a URL and analyze it
+- View SAFE, SUSPICIOUS, or PHISHING verdicts
+- View risk score and risk level
+- See ML model signals and explainable detection reasons
+- Test predefined safe and controlled phishing URLs
+
+The static demo is implemented in `index.html` and communicates with the deployed FastAPI backend on Render.
+
+For details about the static demo page and its deployment, see [`DEMO_PAGE_README.md`](DEMO_PAGE_README.md).
+
+> Note: The demo page itself is static; URL analysis is performed by the deployed PhishGuard backend.
+
 ## 🔐 Privacy
 
 PhishGuard sends website URLs to its backend over HTTPS for security analysis.
@@ -350,6 +369,8 @@ secure-world-hackathon/
 │   └── extension/
 ├── ml/
 ├── presentation/
+├── index.html          
+├── DEMO_PAGE_README.md 
 ├── PRIVACY_POLICY.md
 ├── README.md
 └── requirements.txt
