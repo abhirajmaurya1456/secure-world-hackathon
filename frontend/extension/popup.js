@@ -1,5 +1,4 @@
-const API_URL = "http://127.0.0.1:8000/analyze";
-
+const API_URL = "https://phishguard-backend-h2bo.onrender.com/analyze";
 const urlElement = document.getElementById("url");
 const statusElement = document.getElementById("status");
 const resultElement = document.getElementById("result");
