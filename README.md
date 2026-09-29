@@ -168,20 +168,88 @@ Go Back / Continue Anyway
 
 The extension performs URL-level navigation interception and warning. It is **not a network-level firewall or DNS blocker**.
 
-## 📊 Evaluation
+## 📊 Evaluation & Testing
 
-The final Security Engine V2 was evaluated using controlled test cases.
+PhishGuard was developed using a large, realistic URL dataset containing **74,760 URLs**, followed by separate holdout evaluation and additional real-world/controlled tests.
+
+### 1. Model Development Dataset
+
+The primary dataset contains:
+
+| Dataset | URLs |
+|---|---:|
+| Legitimate URLs | **37,380** |
+| Phishing URLs | **37,380** |
+| **Total** | **74,760** |
+
+The phishing URLs were sampled from **77,321 unique verified phishing URLs** collected from PhishTank. The legitimate URLs came from the legitimate subset of **LegitPhish v2**, providing naturally occurring paths and query strings rather than only simple domain-only URLs.
+
+This balanced dataset was used for model development and evaluation.
+
+### 2. ML Model Evaluation
+
+The feature-based Random Forest model used a **hostname-aware train/test split** to reduce domain leakage:
+
+- Total dataset: **74,760 URLs**
+- Training set: **62,143 URLs**
+- Holdout test set: **12,617 URLs**
+- Features: **19 URL-based security features**
+- Model: Random Forest, 300 trees
+
+**Random Forest results:**
+
+- Accuracy: **98.89%**
+- Precision: **98.95%**
+- Recall: **98.33%**
+- F1 Score: **98.64%**
+
+Additional modelling approaches were also evaluated on the realistic URL dataset:
+
+| Model | Accuracy | Precision | Recall | F1 |
+|---|---:|---:|---:|---:|
+| Feature-based Random Forest | **98.89%** | 98.95% | 98.33% | 98.64% |
+| Raw URL Character Model | **99.01%** | 99.76% | 97.81% | 98.78% |
+| Region-aware Model | **99.13%** | 99.61% | 98.26% | **98.93%** |
+
+The region-aware model achieved the highest benchmark F1 score, but it was **not directly used as the production decision model**. The final Security Engine V2 instead combines complementary model signals with deterministic security indicators and known-domain context.
+
+### 3. Final Security Engine Validation
+
+After model development, a **separate controlled validation set of 30 URLs** was used to evaluate the complete Security Engine V2.
+
+These 30 URLs were **not used to train the models**.
+
+The final validation set contained:
+
+- **17 benign URLs**
+- **13 phishing / phishing-like URLs**
+- **30 URLs total**
+
+Results:
 
 | Evaluation | Result |
 |---|---:|
-| Controlled evaluation | **29/30 (96.67%)** |
+| Final controlled evaluation | **29/30 (96.67%)** |
 | Manual URL tests | **11/12 (91.67%)** |
 | Real-site tests | **10/10 (100%)** |
 | Controlled phishing tests | **8/8 (100%)** |
 
-The controlled evaluation had **0% false-positive rate on the tested benign URLs**.
+For the 30-URL controlled evaluation:
 
-A remaining synthetic stress case was intentionally retained instead of tuning the system specifically to force a positive result.
+- **29/30** URLs were classified correctly.
+- **12/13** phishing/phishing-like URLs were detected.
+- **17/17** tested benign URLs avoided a `PHISHING` verdict.
+- False-positive rate on the tested benign URLs: **0.00%**.
+
+One synthetic stress case was intentionally retained as a false negative rather than tuning the system specifically to force a positive result.
+
+### 4. What These Numbers Mean
+
+The **98.89% / 99.01% / 99.13%** figures are ML benchmark results obtained from the large **74,760-URL dataset and its holdout evaluation**.
+
+The **96.67%** figure is the result of a separate **30-URL controlled end-to-end validation of Security Engine V2**.
+
+The controlled evaluation is intended to measure how the complete security engine behaves on selected manual, real-site, and controlled phishing scenarios. It is not presented as a general real-world accuracy estimate.
 
 ## 📚 Datasets
 
