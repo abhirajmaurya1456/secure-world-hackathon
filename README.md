@@ -301,9 +301,12 @@ https://phishguard-backend-h2bo.onrender.com/docs
 
 ## 🏪 Chrome Web Store
 
-The PhishGuard Chrome extension has been submitted for Chrome Web Store review.
+The PhishGuard Chrome extension is publicly available on the Chrome Web Store.
 
-The public store link will be added here after publication.
+**Install PhishGuard:**  
+https://chromewebstore.google.com/detail/PhishGuard/anmjpjchoalbckbfecimhfemklbfmmbm
+
+The extension is available for free use and can be installed directly from the Chrome Web Store.
 
 ## Live Demo
 
